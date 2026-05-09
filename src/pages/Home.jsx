@@ -1,10 +1,20 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
-import { PRODUCTS } from '../data/products'
+import { fetchProducts } from '../api/products'
 import './Home.css'
 
 export default function Home() {
-  const featured = PRODUCTS.slice(0, 3)
+  const [featured, setFeatured] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetchProducts()
+      .then(data => setFeatured(data.slice(0, 3)))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <div className="home">
@@ -28,9 +38,13 @@ export default function Home() {
       <section className="featured container">
         <h2 className="section-title">Featured Bracelets</h2>
         <p className="section-subtitle">Our most loved healing crystal pieces</p>
-        <div className="grid-3">
-          {featured.map(p => <ProductCard key={p.id} product={p} />)}
-        </div>
+        {loading && <p className="status-msg">Loading products...</p>}
+        {error && <p className="status-msg error">Could not load products: {error}</p>}
+        {!loading && !error && (
+          <div className="grid-3">
+            {featured.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        )}
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
           <Link to="/shop" className="btn-outline">View All Products</Link>
         </div>
