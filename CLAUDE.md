@@ -2,12 +2,44 @@
 
 React + Vite e-commerce site for selling handcrafted crystal bracelets.
 
+---
+
+## ⚠️ MOBILE-FIRST MANDATE
+
+**90% of users are on mobile.** Every feature built from this point forward must be designed and tested mobile-first.
+
+### Rules — no exceptions
+
+1. **Write mobile styles first.** Default CSS targets ≤480px. Add `@media (min-width: 768px)` for desktop enhancements, not the other way round.
+2. **Minimum touch target: 44×44px** for every button, link, and interactive element.
+3. **No horizontal scroll** on any page at 375px viewport width.
+4. **Inputs must have `font-size: 16px` minimum** — enforced globally in `index.css`. Never go below; iOS Safari auto-zooms on smaller inputs.
+5. **Test at 375px before marking any task done.** Use Chrome DevTools → iPhone SE preset.
+6. **Sticky CTAs** — primary action buttons (Add to Cart, Checkout, Submit) must be fixed at the bottom of the screen on mobile, not buried below the fold.
+7. **Swipeable filter bars** — use `overflow-x: auto; flex-wrap: nowrap` for pill/tab filters, not wrapping grids.
+8. **Images** — always use `object-fit: cover` with explicit height. Never let images stretch the layout.
+9. **No modals or dropdowns that break on mobile** — use full-screen overlays or bottom sheets instead.
+10. **Admin panel is secondary** — admin is used by 1-2 people on desktop. Customer-facing pages are the priority.
+
+### Established mobile patterns (already in place — follow them)
+
+| Pattern | Where used | Reuse for |
+|---|---|---|
+| Hamburger drawer | `Navbar.jsx` | Any nav/filter panel |
+| Sticky buy bar | `ProductDetail.css` | Checkout, any primary CTA |
+| Horizontal scroll filter | `Shop.css` | Tags, categories, date filters |
+| 2-column product grid | `index.css .grid-3` | Any card grid |
+| Sidebar overlay drawer | `AdminLayout.jsx` | Any side panel |
+| `authFetch` utility | `src/api/client.js` | Every authenticated API call |
+
+---
+
 ## Tech Stack
 
 - **React 18** with React Router v6
 - **Vite** (dev server port 3000, proxies `/api` → backend on 8081)
-- Plain CSS (no Tailwind, no component library) — CSS files live alongside their component
-- No TypeScript
+- Plain CSS — mobile-first, no Tailwind, no component library
+- **No TypeScript**
 
 ## How to Run
 
@@ -23,102 +55,156 @@ Backend must be running on port 8081 for API calls to work.
 
 ```
 src/
-├── api/              # All fetch calls — one file per domain, no fetch() calls outside here
-│   └── products.js   # fetchProducts(stone?), fetchProduct(id)
-├── components/       # Shared UI, no business logic, no direct API calls
-│   ├── Navbar.jsx
-│   ├── ProductCard.jsx
-│   └── Footer.jsx
-├── context/          # Global state only
-│   └── CartContext.jsx  # useReducer cart — add/remove/updateQty/clear
-├── hooks/            # Custom hooks — data fetching + state, keeps pages thin
-├── pages/            # One file per route, delegates to components and hooks
-│   ├── Home.jsx          → GET /api/products (first 3 as featured)
-│   ├── Shop.jsx          → GET /api/products?stone=X (filter by stone)
-│   ├── ProductDetail.jsx → GET /api/products/:id
-│   └── Cart.jsx          → reads CartContext, no API calls yet
-├── utils/            # Pure helpers (formatPrice, formatDate etc.)
-└── index.css         # Global CSS variables and utility classes only
+├── api/                  # All fetch calls — no fetch() calls outside this folder
+│   ├── admin.js          # fetchStats, fetchAllUsers, fetchAllProducts, createProduct, updateProduct, deleteProduct
+│   ├── auth.js           # login(email, pass), register(name, email, pass)
+│   ├── client.js         # authFetch(url, options, token) — adds Authorization header
+│   ├── products.js       # fetchProducts(stone?), fetchProduct(id)
+│   └── upload.js         # uploadImage(file, token) → { url, publicId }
+├── components/           # Shared UI only — no business logic, no direct API calls
+│   ├── AdminRoute.jsx    # Redirects to / if not ADMIN
+│   ├── Footer.jsx
+│   ├── Navbar.jsx        # Hamburger menu on mobile (<768px), full nav on desktop
+│   ├── ProductCard.jsx   # Shows imageUrl if present, emoji fallback
+│   ├── ProtectedRoute.jsx # Redirects to /login if not authenticated
+│   └── Spinner.jsx       # Centered loading spinner
+├── context/              # Global state only
+│   ├── AuthContext.jsx   # { auth, login, logout, isLoggedIn, isAdmin, token }
+│   │                     # Persists to localStorage key 'sc_auth'
+│   └── CartContext.jsx   # useReducer — add/remove/updateQty/clear
+├── hooks/                # Data fetching hooks — keeps pages thin
+│   ├── useProduct.js     # useProduct(id) → { product, loading, error }
+│   └── useProducts.js    # useProducts() → { products, loading, error }
+├── pages/
+│   ├── admin/            # Admin panel — ADMIN role only
+│   │   ├── AdminLayout.jsx    # Sidebar + Outlet; sidebar is a slide-in drawer on mobile
+│   │   ├── Dashboard.jsx      # Stat cards (products, users) + quick action shortcuts
+│   │   ├── ProductForm.jsx    # Add / edit product with Cloudinary image upload
+│   │   ├── Products.jsx       # All products table — edit, hide/show, delete
+│   │   └── Users.jsx          # All users table — id, name, email, role
+│   ├── AuthForm.css      # Shared styles for Login + Register
+│   ├── Cart.jsx          # Cart items + order summary; requires login
+│   ├── Home.jsx          # Hero + featured 3 products + benefits
+│   ├── Login.jsx
+│   ├── ProductDetail.jsx # Full product info; sticky buy bar on mobile
+│   ├── Register.jsx
+│   └── Shop.jsx          # Full catalog; swipeable stone filter bar
+└── index.css             # CSS variables + global utilities + mobile base styles
 ```
 
 ## Routes
 
-| Path | Page |
-|---|---|
-| `/` | Home — hero + featured 3 products |
-| `/shop` | Full catalog with stone filter |
-| `/product/:id` | Single product detail |
-| `/cart` | Cart with qty controls and order summary |
+| Path | Page | Auth |
+|---|---|---|
+| `/` | Home | Public |
+| `/shop` | Full catalog | Public |
+| `/product/:id` | Product detail | Public |
+| `/login` | Login | Public |
+| `/register` | Register | Public |
+| `/cart` | Cart | Login required |
+| `/admin` | Admin dashboard | ADMIN only |
+| `/admin/products` | Products table | ADMIN only |
+| `/admin/products/new` | Add product | ADMIN only |
+| `/admin/products/:id/edit` | Edit product | ADMIN only |
+| `/admin/users` | Users table | ADMIN only |
 
 ## API Integration
 
-All API calls go through `src/api/products.js`. The Vite proxy handles CORS in dev:
+All API calls go through `src/api/`. The Vite proxy handles CORS in dev:
 
 ```js
-// vite.config.js proxy
+// vite.config.js
 '/api' → 'http://localhost:8081'
 ```
 
-In production, set `VITE_API_BASE` or configure the host's reverse proxy.
+For authenticated calls, always use `authFetch` from `src/api/client.js`:
+```js
+import { authFetch } from './client'
+authFetch('/api/some-endpoint', { method: 'POST', body: JSON.stringify(data) }, token)
+```
+
+Never call `fetch()` directly in a page or component.
 
 ## State Management
 
-Cart state lives in `CartContext` (useReducer). No external state library.
-Products are fetched per-page with `useState` + `useEffect` — move to custom hooks in `src/hooks/` as pages grow.
+| State | Where | How |
+|---|---|---|
+| Cart | `CartContext` | `useReducer` — add/remove/qty/clear |
+| Auth | `AuthContext` | `useState` + `localStorage` — token + user info |
+| Products | `useProducts` hook | `useState` + `useEffect` — fetched fresh per mount |
 
 ## Key Conventions
 
-- **Never call `fetch()` directly inside a component or page** — always go through `src/api/`
-- **Components under ~120 lines** — split into smaller pieces when they grow
-- **CSS file per component** — `Navbar.jsx` imports `Navbar.css`, scoped by class name prefix
+- **Never call `fetch()` directly** in a component or page — always go through `src/api/`
+- **Components under ~120 lines** — split when they grow
+- **CSS file per component** — `Navbar.jsx` imports `Navbar.css`, class names prefixed by component
 - **No prop drilling beyond 2 levels** — lift to context instead
-- Loading state: use `.status-msg` class (defined in `index.css`)
-- Error state: use `.status-msg.error` class
+- **Spinner for loading** — import `Spinner` from `components/Spinner`, not inline text
+- **`.status-msg.error`** for error messages (defined in `index.css`)
+- **Admin pages**: get `token` from `useAuth()`, pass to every API call
 
-## CSS Variables (index.css)
+## CSS Variables (`index.css`)
 
 ```css
---primary: #7b5ea7
+--primary:      #7b5ea7
 --primary-dark: #5c3d8f
---accent: #e8c4d8
---bg: #fdf8ff
---text: #2d2d2d
---text-muted: #777
---shadow: 0 2px 16px rgba(123, 94, 167, 0.12)
---radius: 12px
+--accent:       #e8c4d8
+--bg:           #fdf8ff
+--text:         #2d2d2d
+--text-muted:   #777
+--shadow:       0 2px 16px rgba(123, 94, 167, 0.12)
+--radius:       12px
 ```
 
-## Current State (as of project start)
+## Current State
 
-Built:
-- [x] Navbar with cart badge
-- [x] Home page (hero + featured + benefits section)
-- [x] Shop page with stone filter (calls API)
-- [x] Product detail page (calls API)
-- [x] Cart with add/remove/qty/clear (local state)
-- [x] Footer
+### Done
 
-Not yet built:
-- [ ] Auth (login / register pages)
-- [ ] Checkout flow
-- [ ] Payment (Razorpay)
-- [ ] Order history page
-- [ ] Admin panel
-- [ ] Image upload
-- [ ] Mobile responsive polish
-- [ ] React Error Boundary
-- [ ] Custom hooks in `src/hooks/`
+- [x] Navbar — desktop nav + mobile hamburger drawer with auth state
+- [x] Home — hero, featured products (from API), benefits section
+- [x] Shop — full catalog from API, swipeable stone filter (client-side)
+- [x] Product detail — full info from API, sticky "Add to Cart" bar on mobile
+- [x] Cart — add/remove/qty/clear, order summary, free shipping threshold
+- [x] Footer — responsive (2-col tablet, 1-col mobile)
+- [x] Login page + Register page
+- [x] AuthContext — JWT stored in localStorage, role-aware
+- [x] ProtectedRoute + AdminRoute
+- [x] Cloudinary image upload via `POST /api/upload`
+- [x] `useProducts` and `useProduct` custom hooks
+- [x] `Spinner` component
+- [x] `authFetch` utility (`src/api/client.js`)
+- [x] Admin panel — sidebar layout with mobile drawer
+- [x] Admin Dashboard — stat cards, quick action shortcuts
+- [x] Admin Products — full table with edit / hide-show / delete
+- [x] Admin ProductForm — add/edit with image upload, benefits textarea
+- [x] Admin Users — user table with role badges
+- [x] Mobile responsive — all pages tested at 375px
+
+### Not yet built
+
+- [ ] **Checkout flow** — form with address, payment trigger
+- [ ] **Razorpay payment** — order button, payment modal, success/fail handling
+- [ ] **Order history page** (`/orders`) — list user's past orders
+- [ ] **Admin order management** — list all orders, update status (PENDING → SHIPPED etc.)
+- [ ] **React Error Boundary** — catch runtime crashes, show fallback UI
+- [ ] **Toast notifications** — replace `alert()` in admin with non-blocking toasts
+- [ ] **Pagination** — product grid when catalog grows beyond 20 items
+- [ ] **Empty states** — friendly UI when cart is empty, no orders yet, etc.
+- [ ] **Deploy to Vercel**
 
 ## 15-Day Build Plan
 
-| Days | Feature |
-|---|---|
-| 1–2 | Image upload (Cloudinary) + useProducts hook |
-| 3–4 | Auth — Spring Security JWT + login/register pages |
-| 5–6 | Checkout flow — Order model + checkout page |
-| 7–8 | Razorpay payment integration |
-| 9–10 | Order history page |
-| 11–12 | Admin panel (list orders, update status) |
-| 13 | Mobile responsiveness + empty states |
-| 14 | Input validation + error hardening |
-| 15 | Deploy to Vercel |
+| Days | Feature | Status |
+|---|---|---|
+| 1–2 | Cloudinary image upload + `useProducts`/`useProduct` hooks | ✅ Done |
+| 3–4 | Spring Security JWT + RBAC + Login/Register + Auth routes | ✅ Done |
+| + | Admin panel (Dashboard, Products CRUD, Users, ProductForm) | ✅ Done |
+| + | Full mobile responsiveness (all pages) | ✅ Done |
+| 5–6 | Checkout flow + Order model | 🔲 Next |
+| 7–8 | Razorpay payment integration | 🔲 |
+| 9–10 | Order history page + admin order management | 🔲 |
+| 11 | React Error Boundary + toast notifications | 🔲 |
+| 12 | Empty states polish + loading skeletons | 🔲 |
+| 13 | Input validation hardening | 🔲 |
+| 14 | Production config + security audit | 🔲 |
+| 15 | Deploy FE → Vercel, BE → Railway/Render | 🔲 |
