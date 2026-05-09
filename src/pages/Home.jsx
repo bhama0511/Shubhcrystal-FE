@@ -1,20 +1,12 @@
-import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
-import { fetchProducts } from '../api/products'
+import Spinner from '../components/Spinner'
+import { useProducts } from '../hooks/useProducts'
 import './Home.css'
 
 export default function Home() {
-  const [featured, setFeatured] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    fetchProducts()
-      .then(data => setFeatured(data.slice(0, 3)))
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [])
+  const { products, loading, error } = useProducts()
+  const featured = products.slice(0, 3)
 
   return (
     <div className="home">
@@ -38,7 +30,7 @@ export default function Home() {
       <section className="featured container">
         <h2 className="section-title">Featured Bracelets</h2>
         <p className="section-subtitle">Our most loved healing crystal pieces</p>
-        {loading && <p className="status-msg">Loading products...</p>}
+        {loading && <Spinner />}
         {error && <p className="status-msg error">Could not load products: {error}</p>}
         {!loading && !error && (
           <div className="grid-3">

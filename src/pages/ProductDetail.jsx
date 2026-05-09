@@ -1,24 +1,16 @@
-import { useState, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
-import { fetchProduct } from '../api/products'
+import { useProduct } from '../hooks/useProduct'
+import Spinner from '../components/Spinner'
 import './ProductDetail.css'
 
 export default function ProductDetail() {
   const { id } = useParams()
   const { addToCart } = useCart()
-  const [product, setProduct] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { product, loading, error } = useProduct(id)
 
-  useEffect(() => {
-    fetchProduct(id)
-      .then(setProduct)
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [id])
-
-  if (loading) return <div className="status-msg container">Loading...</div>
+  if (loading) return <Spinner />
 
   if (error || !product) {
     return (
@@ -34,7 +26,10 @@ export default function ProductDetail() {
       <Link to="/shop" className="back-link">← Back to Shop</Link>
       <div className="detail-grid">
         <div className="detail-image">
-          <span>{product.emoji || '💎'}</span>
+          {product.imageUrl
+            ? <img src={product.imageUrl} alt={product.name} className="detail-img" />
+            : <span>{product.emoji || '💎'}</span>
+          }
         </div>
         <div className="detail-info">
           {product.badge && <span className="detail-badge">{product.badge}</span>}
@@ -43,9 +38,7 @@ export default function ProductDetail() {
           <p className="detail-description">{product.description}</p>
           {product.benefits?.length > 0 && (
             <ul className="detail-benefits">
-              {product.benefits.map(b => (
-                <li key={b}>✓ {b}</li>
-              ))}
+              {product.benefits.map(b => <li key={b}>✓ {b}</li>)}
             </ul>
           )}
           <div className="detail-footer">
