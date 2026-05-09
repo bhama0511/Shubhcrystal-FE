@@ -12,6 +12,7 @@
   justify-content: space-between;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  gap: 1rem;
 }
 
 .brand {
@@ -21,11 +22,10 @@
   font-size: 1.4rem;
   font-weight: 800;
   color: var(--primary);
+  white-space: nowrap;
 }
 
-.brand-icon {
-  font-size: 1.6rem;
-}
+.brand-icon { font-size: 1.6rem; }
 
 .nav-links {
   display: flex;
@@ -37,6 +37,7 @@
   color: var(--text-muted);
   transition: color 0.2s;
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-links a.active,
@@ -55,21 +56,57 @@
   border-radius: 2px;
 }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav-user {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-dark);
+  white-space: nowrap;
+}
+
+.nav-login,
+.nav-register,
+.nav-logout {
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  border-radius: var(--radius);
+  white-space: nowrap;
+}
+
+.nav-logout {
+  background: transparent;
+  color: var(--text-muted);
+  border: 2px solid #e0d4f0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.nav-logout:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
 .cart-btn {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   background: var(--primary);
   color: var(--white);
-  padding: 0.5rem 1.2rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
   font-weight: 600;
   transition: background 0.2s;
+  white-space: nowrap;
 }
 
-.cart-btn:hover {
-  background: var(--primary-dark);
-}
+.cart-btn:hover { background: var(--primary-dark); }
 
 .cart-badge {
   background: var(--white);
