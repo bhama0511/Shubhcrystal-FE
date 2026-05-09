@@ -1,144 +1,388 @@
-.product-detail { padding: 2rem 0 4rem; }
+.pd-page {
+  padding-bottom: 2rem;
+}
 
 .back-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   color: var(--primary);
   font-weight: 600;
+  font-size: 0.95rem;
   margin-bottom: 2rem;
   transition: opacity 0.2s;
-  font-size: 0.95rem;
 }
 
-.back-link:hover { opacity: 0.7; }
+.back-link:hover { opacity: 0.65; }
 
-.detail-grid {
+/* ── Two-column grid ── */
+.pd-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  gap: 3.5rem;
   align-items: start;
+  margin-bottom: 4rem;
 }
 
-.detail-image {
-  background: linear-gradient(135deg, #f3e8ff, #e8c4d8);
-  border-radius: var(--radius);
-  height: 420px;
+/* ── Image column ── */
+.pd-image-col { position: sticky; top: 90px; }
+
+.pd-main-image {
+  position: relative;
+  background: linear-gradient(135deg, #f3e8ff 0%, #fce4ec 100%);
+  border-radius: 20px;
+  height: 480px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 10rem;
   overflow: hidden;
+  box-shadow: 0 8px 40px rgba(123, 94, 167, 0.15);
 }
 
-.detail-img {
+.pd-main-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--radius);
 }
 
-.detail-badge {
+.pd-emoji { font-size: 9rem; }
+
+.pd-badge-img {
+  position: absolute;
+  top: 16px;
+  left: 16px;
   background: var(--primary);
   color: white;
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.25rem 0.8rem;
+  padding: 0.3rem 0.9rem;
   border-radius: 999px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
+}
+
+/* ── Info column ── */
+.pd-badge {
   display: inline-block;
+  background: #f3e8ff;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+
+.pd-name {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+  line-height: 1.25;
   margin-bottom: 1rem;
 }
 
-.detail-info h1 {
-  font-size: 2rem;
-  color: var(--primary-dark);
-  margin-bottom: 0.5rem;
-}
-
-.detail-stone {
-  color: var(--text-muted);
-  font-size: 0.9rem;
+.pd-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
   margin-bottom: 1.25rem;
 }
 
-.detail-description {
-  line-height: 1.8;
-  color: var(--text);
-  margin-bottom: 1.5rem;
+.pd-price {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
 }
 
-.detail-benefits {
-  list-style: none;
-  margin-bottom: 2rem;
+.pd-tax {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pd-divider {
+  height: 1px;
+  background: #f0e8ff;
+  margin: 1.25rem 0;
+}
+
+/* ── Stone / Chakra chips ── */
+.pd-chips {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.pd-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: #f8f5ff;
+  border: 1.5px solid #e0d4f0;
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+.pd-chip > span:first-child { font-size: 1.3rem; }
+
+.pd-chip-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.pd-chip-value {
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+}
+
+/* ── Description ── */
+.pd-description {
+  line-height: 1.8;
+  color: var(--text);
+  font-size: 0.97rem;
+}
+
+/* ── Benefits ── */
+.pd-benefits-section { margin-top: 1.25rem; }
+
+.pd-section-heading {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.pd-benefit-cards {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.detail-benefits li {
-  color: var(--primary-dark);
-  font-weight: 500;
-}
-
-.detail-footer {
+.pd-benefit-card {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 0.75rem;
+  background: #f8f5ff;
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--primary-dark);
 }
 
-.detail-price {
-  font-size: 2rem;
-  font-weight: 800;
+.pd-benefit-icon { font-size: 1.1rem; }
+
+/* ── Qty + Add to Cart (desktop) ── */
+.pd-buy-desktop { margin-top: 1.5rem; }
+
+.pd-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.pd-qty-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pd-qty-ctrl {
+  display: flex;
+  align-items: center;
+  border: 2px solid #e0d4f0;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.pd-qty-ctrl button {
+  background: none;
+  border: none;
+  border-radius: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--primary);
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
+.pd-qty-ctrl button:hover { background: #f3e8ff; }
+
+.pd-qty-ctrl span {
+  padding: 0 1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.pd-qty-ctrl.compact button {
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.1rem;
+}
+
+.pd-qty-ctrl.compact span {
+  padding: 0 0.75rem;
+  min-width: 2rem;
+  font-size: 0.95rem;
+}
+
+.pd-add-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.pd-add-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+.pd-add-btn.added {
+  background: #16a34a;
+  transform: none;
+}
+
+/* ── Trust badges ── */
+.pd-trust {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.pd-trust-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fdf8ff;
+  border: 1px solid #f0e8ff;
+  border-radius: 8px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.pd-trust-icon { font-size: 1rem; }
+
+/* ── Product specs ── */
+.pd-specs { margin-top: 0.5rem; }
+
+.pd-spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid #f5f0ff;
+  font-size: 0.9rem;
+}
+
+.pd-spec-row:last-child { border-bottom: none; }
+
+.pd-spec-key {
+  color: var(--text-muted);
+  font-weight: 600;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.pd-spec-val { color: var(--text); text-align: right; }
+
+/* ── Related products ── */
+.pd-related {
+  padding-top: 1rem;
+  border-top: 2px solid #f0e8ff;
+}
+
+/* ── Sticky bar — mobile only ── */
+.pd-sticky-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white);
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid #f0e8ff;
+  box-shadow: 0 -4px 24px rgba(123, 94, 167, 0.13);
+  z-index: 50;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pd-sticky-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Not-found */
 .not-found {
   padding: 5rem 0;
   text-align: center;
 }
-
 .not-found h2 { margin-bottom: 1.5rem; }
 
 /* ── Mobile ── */
 @media (max-width: 768px) {
-  /* Extra bottom padding for the sticky buy bar */
-  .product-detail { padding: 1.25rem 0 120px; }
+  .pd-page { padding-bottom: 100px; }
 
-  .back-link { margin-bottom: 1.25rem; }
+  .back-link { margin-bottom: 1rem; }
 
-  .detail-grid {
+  .pd-grid {
     grid-template-columns: 1fr;
-    gap: 1.25rem;
+    gap: 0;
+    margin-bottom: 2rem;
   }
 
-  .detail-image {
-    height: 280px;
+  .pd-image-col { position: static; }
+
+  .pd-main-image {
+    height: 300px;
+    border-radius: 16px;
+    margin-bottom: 1.25rem;
     font-size: 6rem;
-    border-radius: var(--radius);
   }
 
-  .detail-info h1 { font-size: 1.4rem; }
+  .pd-name { font-size: 1.4rem; }
+  .pd-price { font-size: 1.8rem; }
 
-  .detail-benefits { margin-bottom: 1.25rem; }
+  .pd-chips { gap: 0.5rem; }
+  .pd-chip { padding: 0.5rem 0.75rem; }
 
-  /* Sticky buy bar at bottom on mobile */
-  .detail-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--white);
-    padding: 0.9rem 1rem;
-    box-shadow: 0 -4px 20px rgba(123, 94, 167, 0.12);
-    z-index: 50;
-    border-top: 1px solid #f0e8ff;
-    justify-content: space-between;
-  }
+  /* Hide desktop buy section on mobile */
+  .pd-buy-desktop { display: none; }
 
-  .detail-price { font-size: 1.5rem; }
+  /* Show sticky bar on mobile */
+  .pd-sticky-bar { display: flex; }
 
-  .detail-footer .btn-primary {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-  }
+  .pd-trust { grid-template-columns: 1fr 1fr; }
+  .pd-trust-item { font-size: 0.75rem; padding: 0.5rem 0.6rem; }
+
+  .pd-spec-val { font-size: 0.85rem; }
+}
+
+@media (max-width: 480px) {
+  .pd-main-image { height: 260px; }
+  .pd-trust { grid-template-columns: 1fr; }
 }
