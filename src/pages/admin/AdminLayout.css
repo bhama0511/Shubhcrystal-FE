@@ -2,6 +2,7 @@
   display: flex;
   min-height: calc(100vh - 65px);
   background: #f8f5ff;
+  position: relative;
 }
 
 /* ── Sidebar ── */
@@ -13,6 +14,7 @@
   display: flex;
   flex-direction: column;
   padding: 1.5rem 0;
+  transition: transform 0.3s ease;
 }
 
 .sidebar-brand {
@@ -24,6 +26,18 @@
   color: var(--white);
   padding: 0 1.5rem 1.5rem;
   border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-close {
+  display: none;
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
 }
 
 .sidebar-nav {
@@ -46,16 +60,8 @@
   transition: all 0.15s;
 }
 
-.sidebar-link:hover {
-  background: rgba(255,255,255,0.1);
-  color: var(--white);
-}
-
-.sidebar-link.active {
-  background: rgba(255,255,255,0.15);
-  color: var(--white);
-  font-weight: 700;
-}
+.sidebar-link:hover { background: rgba(255,255,255,0.1); color: var(--white); }
+.sidebar-link.active { background: rgba(255,255,255,0.15); color: var(--white); font-weight: 700; }
 
 .sidebar-icon { font-size: 1.1rem; }
 
@@ -87,16 +93,8 @@
   flex-shrink: 0;
 }
 
-.sidebar-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--white);
-}
-
-.sidebar-role {
-  font-size: 0.75rem;
-  opacity: 0.6;
-}
+.sidebar-name  { font-size: 0.85rem; font-weight: 600; color: var(--white); }
+.sidebar-role  { font-size: 0.75rem; opacity: 0.6; }
 
 .sidebar-actions {
   display: flex;
@@ -114,11 +112,7 @@
   transition: background 0.15s;
 }
 
-.sidebar-back {
-  color: rgba(255,255,255,0.6);
-  background: none;
-}
-
+.sidebar-back { color: rgba(255,255,255,0.6); background: none; }
 .sidebar-back:hover { background: rgba(255,255,255,0.08); color: white; }
 
 .sidebar-logout {
@@ -136,6 +130,23 @@
   flex: 1;
   overflow-y: auto;
   padding: 2rem;
+  min-width: 0;
+}
+
+.admin-topbar {
+  display: none;
+  margin-bottom: 1.25rem;
+}
+
+.admin-menu-btn {
+  background: var(--primary-dark);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* ── Shared admin styles ── */
@@ -144,31 +155,26 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.admin-title {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--primary-dark);
-}
-
-.admin-subtitle {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  margin-top: 0.2rem;
-}
+.admin-title   { font-size: 1.6rem; font-weight: 800; color: var(--primary-dark); }
+.admin-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-top: 0.2rem; }
 
 .admin-card {
   background: var(--white);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 1.5rem;
+  overflow-x: auto;
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
+  min-width: 480px;
 }
 
 .admin-table th {
@@ -216,11 +222,45 @@
   border: none;
 }
 
-.btn-edit   { background: #f0e8ff; color: var(--primary-dark); }
-.btn-edit:hover   { background: #e0d0ff; }
-.btn-delete { background: #fef2f2; color: #dc2626; }
-.btn-delete:hover { background: #fecaca; }
-.btn-toggle { background: #f0fdf4; color: #15803d; }
-.btn-toggle:hover { background: #dcfce7; }
-.btn-toggle.off { background: #fef2f2; color: #dc2626; }
+.btn-edit          { background: #f0e8ff; color: var(--primary-dark); }
+.btn-edit:hover    { background: #e0d0ff; }
+.btn-delete        { background: #fef2f2; color: #dc2626; }
+.btn-delete:hover  { background: #fecaca; }
+.btn-toggle        { background: #f0fdf4; color: #15803d; }
+.btn-toggle:hover  { background: #dcfce7; }
+.btn-toggle.off    { background: #fef2f2; color: #dc2626; }
 .btn-toggle.off:hover { background: #fecaca; }
+
+/* ── Sidebar overlay (mobile) ── */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 199;
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 200;
+    transform: translateX(-100%);
+    padding-top: 3rem;
+  }
+
+  .admin-sidebar.open { transform: translateX(0); }
+
+  .sidebar-close { display: block; }
+  .sidebar-overlay { display: block; }
+
+  .admin-topbar { display: flex; }
+
+  .admin-content { padding: 1rem; }
+  .admin-title   { font-size: 1.3rem; }
+
+  .admin-header { margin-bottom: 1.25rem; }
+}

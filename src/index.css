@@ -21,6 +21,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app {
@@ -29,9 +30,7 @@ body {
   flex-direction: column;
 }
 
-.main-content {
-  flex: 1;
-}
+.main-content { flex: 1; }
 
 .container {
   max-width: 1200px;
@@ -58,6 +57,7 @@ button {
   color: var(--white);
   padding: 0.75rem 1.75rem;
   font-weight: 600;
+  display: inline-block;
 }
 
 .btn-primary:hover {
@@ -71,6 +71,7 @@ button {
   border: 2px solid var(--primary);
   padding: 0.65rem 1.5rem;
   font-weight: 600;
+  display: inline-block;
 }
 
 .btn-outline:hover {
@@ -103,6 +104,30 @@ button {
   font-size: 1rem;
 }
 
-.status-msg.error {
-  color: #e53e3e;
+.status-msg.error { color: #e53e3e; }
+
+/* ── Mobile global ── */
+@media (max-width: 768px) {
+  .container { padding: 0 1rem; }
+  .section-title { font-size: 1.5rem; }
+  .section-subtitle { margin-bottom: 1.25rem; }
+
+  /* 2-column product grid on mobile */
+  .grid-3 {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  /* Prevent iOS auto-zoom on inputs */
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+
+  .btn-primary, .btn-outline {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (max-width: 360px) {
+  .grid-3 { grid-template-columns: 1fr; }
 }

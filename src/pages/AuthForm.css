@@ -65,7 +65,7 @@
 }
 
 .auth-form input {
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
   border: 2px solid #e0d4f0;
   border-radius: 10px;
   font-size: 1rem;
@@ -75,13 +75,11 @@
   background: var(--bg);
 }
 
-.auth-form input:focus {
-  border-color: var(--primary);
-}
+.auth-form input:focus { border-color: var(--primary); }
 
 .auth-submit {
   width: 100%;
-  padding: 0.85rem;
+  padding: 0.9rem;
   margin-top: 0.5rem;
   font-size: 1rem;
 }
@@ -99,7 +97,10 @@
   color: var(--text-muted);
 }
 
-.auth-switch a {
-  color: var(--primary);
-  font-weight: 600;
+.auth-switch a { color: var(--primary); font-weight: 600; }
+
+@media (max-width: 480px) {
+  .auth-card { padding: 1.75rem 1.25rem; }
+  .auth-header { margin-bottom: 1.5rem; }
+  .auth-header h1 { font-size: 1.4rem; }
 }

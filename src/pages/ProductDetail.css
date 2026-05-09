@@ -1,6 +1,4 @@
-.product-detail {
-  padding: 2rem 0 4rem;
-}
+.product-detail { padding: 2rem 0 4rem; }
 
 .back-link {
   display: inline-block;
@@ -8,6 +6,7 @@
   font-weight: 600;
   margin-bottom: 2rem;
   transition: opacity 0.2s;
+  font-size: 0.95rem;
 }
 
 .back-link:hover { opacity: 0.7; }
@@ -99,3 +98,47 @@
 }
 
 .not-found h2 { margin-bottom: 1.5rem; }
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  /* Extra bottom padding for the sticky buy bar */
+  .product-detail { padding: 1.25rem 0 120px; }
+
+  .back-link { margin-bottom: 1.25rem; }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .detail-image {
+    height: 280px;
+    font-size: 6rem;
+    border-radius: var(--radius);
+  }
+
+  .detail-info h1 { font-size: 1.4rem; }
+
+  .detail-benefits { margin-bottom: 1.25rem; }
+
+  /* Sticky buy bar at bottom on mobile */
+  .detail-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    padding: 0.9rem 1rem;
+    box-shadow: 0 -4px 20px rgba(123, 94, 167, 0.12);
+    z-index: 50;
+    border-top: 1px solid #f0e8ff;
+    justify-content: space-between;
+  }
+
+  .detail-price { font-size: 1.5rem; }
+
+  .detail-footer .btn-primary {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+}

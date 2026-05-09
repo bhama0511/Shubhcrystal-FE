@@ -30,7 +30,6 @@
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  position: relative;
 }
 
 .hero-crystal {
@@ -50,16 +49,11 @@
 
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  50%       { transform: translateY(-12px); }
 }
 
-.featured {
-  padding: 4rem 0;
-}
-
-.benefits {
-  padding: 4rem 0;
-}
+.featured { padding: 4rem 0; }
+.benefits  { padding: 4rem 0; }
 
 .benefits-grid {
   display: grid;
@@ -91,4 +85,41 @@
 .benefit-card p {
   font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .hero { padding: 2.5rem 0; }
+
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .hero-text h1 { font-size: 2rem; margin-bottom: 0.75rem; }
+  .hero-text p  { font-size: 1rem; margin-bottom: 1.25rem; max-width: 100%; }
+
+  .hero-visual { order: -1; gap: 0.75rem; }
+  .hero-crystal { font-size: 3.5rem; }
+  .hero-crystal.secondary { font-size: 2.5rem; }
+  .hero-crystal.tertiary  { display: none; }
+
+  .featured { padding: 2.5rem 0; }
+  .benefits  { padding: 2rem 0; }
+
+  .benefits-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .benefit-card { padding: 1.25rem 1rem; }
+  .benefit-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .benefit-card h3 { font-size: 0.88rem; }
+  .benefit-card p  { font-size: 0.8rem; }
+}
+
+@media (max-width: 480px) {
+  .hero-text h1 { font-size: 1.7rem; }
+  .benefits-grid { grid-template-columns: 1fr; }
 }
