@@ -10,8 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 0.85rem 1.75rem;
   gap: 1rem;
 }
 
@@ -232,6 +231,10 @@
 @media (max-width: 768px) {
   .nav-links, .nav-actions { display: none; }
   .mobile-controls { display: flex; }
+
+  .navbar-inner {
+    padding: 0.85rem 1.25rem;
+  }
 
   .brand-name { font-size: 1.2rem; }
   .brand-icon  { font-size: 1.4rem; }

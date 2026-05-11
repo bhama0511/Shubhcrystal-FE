@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import './Cart.css'
 
 export default function Cart() {
   const { cart, removeFromCart, updateQty, total, clearCart } = useCart()
+  const navigate = useNavigate()
 
   if (cart.length === 0) {
     return (
@@ -54,7 +55,11 @@ export default function Cart() {
             <span>Total</span>
             <span>₹{(total >= 999 ? total : total + 99).toLocaleString()}</span>
           </div>
-          <button className="btn-primary" style={{ width: '100%', marginTop: '1rem' }}>
+          <button
+            className="btn-primary"
+            style={{ width: '100%', marginTop: '1rem' }}
+            onClick={() => navigate('/checkout')}
+          >
             Proceed to Checkout
           </button>
           <button className="btn-outline" style={{ width: '100%', marginTop: '0.75rem' }} onClick={clearCart}>

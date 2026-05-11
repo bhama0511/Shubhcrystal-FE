@@ -30,6 +30,7 @@ export default function Navbar() {
         <nav className="nav-links">
           <NavLink to="/" end>Home</NavLink>
           <NavLink to="/shop">Shop</NavLink>
+          {isLoggedIn && !isAdmin && <NavLink to="/orders">My Orders</NavLink>}
           {isAdmin && <NavLink to="/admin">Admin</NavLink>}
         </nav>
 
@@ -71,6 +72,9 @@ export default function Navbar() {
       <div className={`mobile-menu ${menuOpen ? 'visible' : ''}`}>
         <NavLink to="/" end className="mobile-nav-link" onClick={close}>🏠 Home</NavLink>
         <NavLink to="/shop"  className="mobile-nav-link" onClick={close}>💎 Shop</NavLink>
+        {isLoggedIn && !isAdmin && (
+          <NavLink to="/orders" className="mobile-nav-link" onClick={close}>📦 My Orders</NavLink>
+        )}
         {isAdmin && (
           <NavLink to="/admin" className="mobile-nav-link" onClick={close}>⚙️ Admin Panel</NavLink>
         )}

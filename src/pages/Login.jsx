@@ -9,6 +9,7 @@ export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
+  const resetSuccess = location.state?.resetSuccess
 
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState(null)
@@ -40,6 +41,9 @@ export default function Login() {
           <p>Sign in to your ShubhCrystals account</p>
         </div>
 
+        {resetSuccess && (
+          <div className="auth-success">Password updated. Sign in with your new password.</div>
+        )}
         {error && <div className="auth-error">{error}</div>}
 
         <form onSubmit={onSubmit} className="auth-form">
@@ -65,6 +69,9 @@ export default function Login() {
               required
             />
           </label>
+          <div className="auth-forgot">
+            <Link to="/forgot-password">Forgot password?</Link>
+          </div>
           <button type="submit" className="btn-primary auth-submit" disabled={loading}>
             {loading ? 'Signing in…' : 'Sign In'}
           </button>

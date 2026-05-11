@@ -59,6 +59,7 @@ src/
 │   ├── admin.js          # fetchStats, fetchAllUsers, fetchAllProducts, createProduct, updateProduct, deleteProduct
 │   ├── auth.js           # login(email, pass), register(name, email, pass)
 │   ├── client.js         # authFetch(url, options, token) — adds Authorization header
+│   ├── orders.js         # placeOrder, fetchMyOrders, fetchAllOrders, updateOrderStatus
 │   ├── products.js       # fetchProducts(stone?), fetchProduct(id)
 │   └── upload.js         # uploadImage(file, token) → { url, publicId }
 ├── components/           # Shared UI only — no business logic, no direct API calls
@@ -79,15 +80,20 @@ src/
 │   ├── admin/            # Admin panel — ADMIN role only
 │   │   ├── AdminLayout.jsx    # Sidebar + Outlet; sidebar is a slide-in drawer on mobile
 │   │   ├── Dashboard.jsx      # Stat cards (products, users) + quick action shortcuts
+│   │   ├── Orders.jsx         # All orders table — customer, items, total, status dropdown
 │   │   ├── ProductForm.jsx    # Add / edit product with Cloudinary image upload
 │   │   ├── Products.jsx       # All products table — edit, hide/show, delete
 │   │   └── Users.jsx          # All users table — id, name, email, role
-│   ├── AuthForm.css      # Shared styles for Login + Register
-│   ├── Cart.jsx          # Cart items + order summary; requires login
+│   ├── AuthForm.css      # Shared styles for Login + Register + Forgot/Reset password
+│   ├── Cart.jsx          # Cart items + order summary; "Proceed to Checkout" → /checkout
+│   ├── Checkout.jsx      # Address form + order summary; sticky place-order CTA on mobile
+│   ├── ForgotPassword.jsx # Email form → POST /forgot-password; "check your inbox" success state
 │   ├── Home.jsx          # Hero + featured 3 products + benefits
-│   ├── Login.jsx
+│   ├── Login.jsx          # Includes "Forgot password?" link + reset-success banner
+│   ├── Orders.jsx        # User's order history — status badges, items, shipping
 │   ├── ProductDetail.jsx # Full product info; sticky buy bar on mobile
 │   ├── Register.jsx
+│   ├── ResetPassword.jsx # Reads ?token= from URL, password + confirm form, → /login on success
 │   └── Shop.jsx          # Full catalog; swipeable stone filter bar
 └── index.css             # CSS variables + global utilities + mobile base styles
 ```
@@ -101,11 +107,16 @@ src/
 | `/product/:id` | Product detail | Public |
 | `/login` | Login | Public |
 | `/register` | Register | Public |
+| `/forgot-password` | Request reset email | Public |
+| `/reset-password?token=…` | Set new password from email link | Public |
 | `/cart` | Cart | Login required |
+| `/checkout` | Place order (address + summary) | Login required |
+| `/orders` | My order history | Login required |
 | `/admin` | Admin dashboard | ADMIN only |
 | `/admin/products` | Products table | ADMIN only |
 | `/admin/products/new` | Add product | ADMIN only |
 | `/admin/products/:id/edit` | Edit product | ADMIN only |
+| `/admin/orders` | All orders + status updates | ADMIN only |
 | `/admin/users` | Users table | ADMIN only |
 
 ## API Integration
@@ -179,17 +190,19 @@ Never call `fetch()` directly in a page or component.
 - [x] Admin ProductForm — add/edit with image upload, benefits textarea
 - [x] Admin Users — user table with role badges
 - [x] Mobile responsive — all pages tested at 375px
+- [x] **Checkout page** (`/checkout`) — address form, COD note, sticky place-order CTA on mobile
+- [x] **Orders page** (`/orders`) — order history with status badges, success banner after placement
+- [x] **"My Orders" link** in Navbar (desktop nav + mobile drawer) when logged in
+- [x] **Admin Orders** (`/admin/orders`) — all orders with inline status dropdown
+- [x] **Empty states** for empty cart, empty checkout, and empty orders pages
+- [x] **Forgot/Reset password flow** — `/forgot-password` (email form, "check inbox" state), `/reset-password?token=…` (password + confirm), reset-success banner on `/login`
 
 ### Not yet built
 
-- [ ] **Checkout flow** — form with address, payment trigger
-- [ ] **Razorpay payment** — order button, payment modal, success/fail handling
-- [ ] **Order history page** (`/orders`) — list user's past orders
-- [ ] **Admin order management** — list all orders, update status (PENDING → SHIPPED etc.)
+- [ ] **Razorpay payment** — order button, payment modal, success/fail handling (currently Cash on Delivery)
 - [ ] **React Error Boundary** — catch runtime crashes, show fallback UI
 - [ ] **Toast notifications** — replace `alert()` in admin with non-blocking toasts
 - [ ] **Pagination** — product grid when catalog grows beyond 20 items
-- [ ] **Empty states** — friendly UI when cart is empty, no orders yet, etc.
 - [ ] **Deploy to Vercel**
 
 ## 15-Day Build Plan
@@ -200,9 +213,9 @@ Never call `fetch()` directly in a page or component.
 | 3–4 | Spring Security JWT + RBAC + Login/Register + Auth routes | ✅ Done |
 | + | Admin panel (Dashboard, Products CRUD, Users, ProductForm) | ✅ Done |
 | + | Full mobile responsiveness (all pages) | ✅ Done |
-| 5–6 | Checkout flow + Order model | 🔲 Next |
-| 7–8 | Razorpay payment integration | 🔲 |
-| 9–10 | Order history page + admin order management | 🔲 |
+| 5–6 | Checkout flow + Order model + my-orders + admin orders | ✅ Done |
+| 7–8 | Razorpay payment integration | 🔲 (paused — Razorpay approval pending) |
+| 7–8 (alt) | Forgot/Reset password pages + transactional email triggers | ✅ Done |
 | 11 | React Error Boundary + toast notifications | 🔲 |
 | 12 | Empty states polish + loading skeletons | 🔲 |
 | 13 | Input validation hardening | 🔲 |

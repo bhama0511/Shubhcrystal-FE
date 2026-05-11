@@ -6,6 +6,7 @@ import './AdminLayout.css'
 const NAV = [
   { to: '/admin',          label: 'Dashboard', icon: '📊', end: true },
   { to: '/admin/products', label: 'Products',  icon: '💎' },
+  { to: '/admin/orders',   label: 'Orders',    icon: '📦' },
   { to: '/admin/users',    label: 'Users',     icon: '👥' },
 ]
 
